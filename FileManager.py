@@ -8,7 +8,7 @@ import pandas as pd
 class FileManager():
     filename : str = field(init=False, repr=False)
 
-    def pickFile(self, sheet_name):
+    def pickFile(self, sheet_name:str = "Sheet1"):
         Tk().withdraw() # we don't want a full GUI, so keep the root window from appearing
         self.filename = askopenfilename() # show an "Open" dialog box and return the path to the selected file
         
@@ -21,7 +21,9 @@ class FileManager():
         file_extension = file_list[-1]
 
         file = None
-        if file_extension == "xlsx":
+        if file_extension == "xlsx" and sheet_name == "Sheet1":
+            file = pd.read_excel(self.filename, header=0)
+        elif file_extension == "xslx" and sheet_name != "Sheet1":
             file = pd.read_excel(self.filename, header=0, sheet_name=sheet_name)
         elif file_extension == "csv":
             file = pd.read_csv(self.filename, encoding='utf-8')
